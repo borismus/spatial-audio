@@ -29,10 +29,11 @@ function AudioScene(audioScene) {
   this.deviceOrientationListener = this.setOrientationControls.bind(this);
   window.addEventListener('deviceorientation', this.deviceOrientationListener, true);
 
-  container.appendChild(renderer.domElement);
-
   window.addEventListener('resize', this.onResize.bind(this), false);
-  setTimeout(this.onResize.bind(this), 1);
+  this.onResize();
+
+  var container = document.querySelector('#container');
+  container.appendChild(renderer.domElement);
 }
 
 AudioScene.prototype.addSource = function(x, y, opt_color) {
