@@ -19,16 +19,17 @@ function AudioScene(audioScene) {
   var light = new THREE.HemisphereLight(0x777777, 0x000000, 0.6);
   scene.add(light);
 
+  var controls = new DeviceOrientationController(camera, renderer.domElement);
+  controls.connect();
+
   this.scene = scene;
   this.renderer = renderer;
   this.camera = camera;
   this.effect = effect;
   this.observerObject = this.addObserver();
-  this.controls = this.createOrbitControls();
+  this.controls = controls;
 
-  this.deviceOrientationListener = this.setOrientationControls.bind(this);
-  window.addEventListener('deviceorientation', this.deviceOrientationListener, true);
-
+  // Handle resizing.
   window.addEventListener('resize', this.onResize.bind(this), false);
   this.onResize();
 
@@ -77,6 +78,7 @@ AudioScene.prototype.render = function() {
     console.log('Observer position not set yet.');
   }
   this.effect.render(this.scene, this.camera);
+  this.controls.update();
   //this.renderer.render(this.scene, this.camera);
   requestAnimationFrame(this.render.bind(this));
 }
@@ -94,20 +96,6 @@ AudioScene.prototype.createOrbitControls = function() {
   controls.noKeys = true;
   controls.autoRotate = true;
   return controls;
-};
-
-AudioScene.prototype.setOrientationControls = function(e) {
-  if (!e.alpha) {
-    return;
-  }
-
-  controls = new THREE.DeviceOrientationControls(this.camera, true);
-  controls.connect();
-  controls.update();
-
-  this.renderer.domElement.addEventListener('click', this.onClick, false);
-
-  window.removeEventListener('deviceorientation', this.deviceOrientationListener);
 };
 
 AudioScene.prototype.onClick = function() {
