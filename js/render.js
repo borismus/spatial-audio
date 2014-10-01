@@ -102,10 +102,23 @@ AudioScene.prototype.setOrientationControls = function(e) {
   controls.connect();
   controls.update();
 
-  this.renderer.domElement.addEventListener('click', fullscreen, false);
+  this.renderer.domElement.addEventListener('click', this.onClick, false);
 
   window.removeEventListener('deviceorientation', this.setOrientationControls.bind(this));
 };
+
+AudioScene.prototype.onClick = function() {
+  var container = document.querySelector('#container');
+  if (container.requestFullscreen) {
+    container.requestFullscreen();
+  } else if (container.msRequestFullscreen) {
+    container.msRequestFullscreen();
+  } else if (container.mozRequestFullScreen) {
+    container.mozRequestFullScreen();
+  } else if (container.webkitRequestFullscreen) {
+    container.webkitRequestFullscreen();
+  }
+}
 
 window.addEventListener('DOMContentLoaded', function() {
   as = new AudioScene();

@@ -55,7 +55,6 @@
       play: function() {
         // Create a new source here.
         var source = this.context.createBufferSource();
-        source.loop = true;
         source.buffer = this.buffer;
         source.connect(this.gain);
         source.start(0);
