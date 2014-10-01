@@ -7,8 +7,6 @@
       context: null,
       loaded: false,
       ready: function() {
-        console.log('AudioPanner ready ' + this.src);
-
         // Create the gain node.
         var gain = this.context.createGain();
         gain.gain.value = this.gain || 1;
@@ -17,6 +15,7 @@
         AudioUtil.load(this.context, this.src, function(buffer) {
           this.loaded = true;
           this.buffer = buffer;
+          console.log('AudioPanner loaded ' + this.src);
         }.bind(this));
 
         var panner = this.context.createPanner();

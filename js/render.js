@@ -2,6 +2,8 @@
 
 
 function AudioScene(audioScene) {
+  this.isCardboard = this.isMobile();
+
   // Set the scene size.
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(75, 1, 0.001, 700);
@@ -19,15 +21,20 @@ function AudioScene(audioScene) {
   var light = new THREE.HemisphereLight(0x777777, 0x000000, 0.6);
   scene.add(light);
 
-  var controls = new DeviceOrientationController(camera, renderer.domElement);
-  controls.connect();
+  var observer = this.createObserver();
+  scene.add(observer);
 
   this.scene = scene;
   this.renderer = renderer;
   this.camera = camera;
   this.effect = effect;
-  this.observerObject = this.addObserver();
-  this.controls = controls;
+  this.observerObject = observer;
+
+  if (this.isCardboard) {
+    var controls = new DeviceOrientationController(camera, renderer.domElement);
+    controls.connect();
+    this.controls = controls;
+  }
 
   // Handle resizing.
   window.addEventListener('resize', this.onResize.bind(this), false);
@@ -50,12 +57,11 @@ AudioScene.prototype.addSource = function(x, y, opt_color) {
   return cube;
 };
 
-AudioScene.prototype.addObserver = function() {
+AudioScene.prototype.createObserver = function() {
   // top: 0, bottom radius: 0.5, height: 1.
   var geometry = new THREE.CylinderGeometry(0, 0.5, 1, 32, 1, false);
   var material = new THREE.MeshBasicMaterial({color: 0xffffff});
   var object = new THREE.Mesh(geometry, material);
-  this.scene.add(object);
   return object;
 }
 
@@ -71,32 +77,16 @@ AudioScene.prototype.turnObserver = function(angle) {
 AudioScene.prototype.render = function() {
   // Update the observer object position based on the audio DOM.
   var observer = document.querySelector('audio-observer');
-  if (observer.position) {
   this.moveObserver(observer.position.x, observer.position.y);
   this.turnObserver(observer.getAngle());
+  if (this.isCardboard) {
+    this.effect.render(this.scene, this.camera);
+    this.controls.update();
   } else {
-    console.log('Observer position not set yet.');
+    this.renderer.render(this.scene, this.camera);
   }
-  this.effect.render(this.scene, this.camera);
-  this.controls.update();
-  //this.renderer.render(this.scene, this.camera);
   requestAnimationFrame(this.render.bind(this));
 }
-
-AudioScene.prototype.createOrbitControls = function() {
-  controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-  controls.rotateLeft(-Math.PI / 2);
-  controls.target.set(
-    this.camera.position.x + 0.1,
-    this.camera.position.y,
-    this.camera.position.z
-  );
-  controls.noZoom = true;
-  controls.noPan = true;
-  controls.noKeys = true;
-  controls.autoRotate = true;
-  return controls;
-};
 
 AudioScene.prototype.onClick = function() {
   var container = document.querySelector('#container');
@@ -123,10 +113,17 @@ AudioScene.prototype.onResize = function() {
   this.effect.setSize(width, height);
 };
 
+AudioScene.prototype.isMobile = function() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+var COLORS = [0xff0000, 0x00ff00, 0x0000ff];
 window.addEventListener('polymer-ready', function() {
   as = new AudioScene();
-  as.addSource(1, 0, 0xff0000);
-  as.addSource(0, 1, 0x00ff00);
-  as.addSource(-1, 0, 0x0000ff);
+  var panners = document.querySelectorAll('audio-panner');
+  for (var i = 0; i < panners.length; i++) {
+    var panner = panners[i];
+    as.addSource(panner.position.x, panner.position.y, COLORS[i % COLORS.length]);
+  }
   as.render();
 });
