@@ -45,14 +45,7 @@ function AudioScene(contextSelector) {
     controls.connect();
     this.controls = controls;
   }
-
-  //container.addEventListener('click', this.goFullscreen.bind(this));
-
-  // Handle resizing.
-  //window.addEventListener('resize', this.onResize.bind(this), false);
   this.onResize();
-
-  //container.appendChild(renderer.domElement);
 }
 
 AudioScene.prototype.addSource = function(x, y, opt_color) {
@@ -100,19 +93,6 @@ AudioScene.prototype.render = function() {
   }
   requestAnimationFrame(this.render.bind(this));
 }
-
-AudioScene.prototype.goFullscreen = function() {
-  var container = document.querySelector('#container');
-  if (container.requestFullscreen) {
-    container.requestFullscreen();
-  } else if (container.msRequestFullscreen) {
-    container.msRequestFullscreen();
-  } else if (container.mozRequestFullScreen) {
-    container.mozRequestFullScreen();
-  } else if (container.webkitRequestFullscreen) {
-    container.webkitRequestFullscreen();
-  }
-};
 
 AudioScene.prototype.onResize = function() {
   var container = document.querySelector('#container');

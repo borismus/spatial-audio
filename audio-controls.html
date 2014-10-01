@@ -1,5 +1,5 @@
 <polymer-element name="audio-controls" attributes="contextSelector autoplay"
-    on-keydown="{{keyHandler}}">
+    on-keydown="{{keyHandler}}" on-click="{{clickHandler}}">
   <template>
     <style>
       #controls {
@@ -17,7 +17,7 @@
     <div id="render"></div>
     <div id="controls">
       <template if="{{!autoplay}}">
-      <button id="play" on-click={{play}}>Play</button>
+        <button id="play" on-click={{play}}>Play</button>
       </template>
     </div>
   </template>
@@ -99,7 +99,21 @@
         } else {
           console.log('failed to autoplay');
         }
+      },
+
+      clickHandler: function() {
+        var container = this.$.render;
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+          } else if (container.msRequestFullscreen) {
+          container.msRequestFullscreen();
+          } else if (container.mozRequestFullScreen) {
+          container.mozRequestFullScreen();
+          } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
       }
+
     });
   </script>
 </polymer-element>
