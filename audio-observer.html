@@ -20,10 +20,10 @@
           console.log('Parsed position string');
           this.position = AudioUtil.parseVector(this.position);
         }
-        console.log('Position is now', this.position);
         var listener = this.context.listener;
         var p = this.position;
         listener.setPosition(p.x, p.y, p.z);
+        console.log('Position is now', this.position);
       },
 
       orientationChanged: function() {
@@ -35,6 +35,7 @@
         var up = this.up;
         var listener = this.context.listener;
         listener.setOrientation(o.x, o.y, o.z, up.x, up.y, up.z);
+        console.log('Orientation is now', this.orientation);
       },
 
       turn: function(angleDelta) {
@@ -48,7 +49,6 @@
         var y = Math.sin(newAngle);
         this.orientation.x = x;
         this.orientation.y = y;
-        console.log(newAngle, o.x, o.y);
       },
 
       getAngle: function() {

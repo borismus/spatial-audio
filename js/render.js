@@ -70,7 +70,7 @@ AudioScene.prototype.addSource = function(x, y, opt_color) {
 
 AudioScene.prototype.createObserver = function() {
   // top: 0, bottom radius: 0.5, height: 1.
-  var geometry = new THREE.CylinderGeometry(0, 0.5, 1, 32, 1, false);
+  var geometry = new THREE.CylinderGeometry(0, 0.2, 0.5, 32, 1, false);
   var material = new THREE.MeshBasicMaterial({color: 0xffffff});
   var object = new THREE.Mesh(geometry, material);
   return object;

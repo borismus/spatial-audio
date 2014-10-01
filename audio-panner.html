@@ -20,11 +20,12 @@
 
         var panner = this.context.createPanner();
         // Use a point sound for now.
+        //panner.coneOuterGain = 0.1;
         panner.coneInnerAngle = 360;
         panner.coneOuterAngle = 360;
-
+        panner.panningModel = 'HRTF';
         panner.distanceModel = 'exponential';
-        panner.rolloffFactor = 6;
+        panner.rolloffFactor = 10;
 
         // Save the nodes for later.
         this.gain = gain;
@@ -41,6 +42,7 @@
         }
         var p = this.position;
         this.panner.setPosition(p.x, p.y, p.z);
+        console.log('Panner', this.src, 'position', this.position);
       },
 
       orientationChanged: function() {
