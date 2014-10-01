@@ -1,5 +1,5 @@
 <polymer-element name="audio-controls" attributes="contextSelector autoplay"
-on-keydown="{{keyHandler}}" on-click="{{goFullscreen}}" on-touchstart="{{goFullscreen}}">
+on-keydown="{{keyHandler}}" on-click="{{goFullscreen}}" on-tap="{{goFullscreen}}">
   <template>
     <style>
       #controls {
@@ -103,16 +103,17 @@ on-keydown="{{keyHandler}}" on-click="{{goFullscreen}}" on-touchstart="{{goFulls
 
       goFullscreen: function() {
         var container = this.$.render;
+        //var container = document.documentElement;
         if (container.requestFullscreen) {
           container.requestFullscreen();
-          } else if (container.msRequestFullscreen) {
+        } else if (container.msRequestFullscreen) {
           container.msRequestFullscreen();
-          } else if (container.mozRequestFullScreen) {
-          container.mozRequestFullScreen();
-          } else if (container.webkitRequestFullscreen) {
-          container.webkitRequestFullscreen();
-        }
+        } else if (container.mozRequestFullScreen) {
+        container.mozRequestFullScreen();
+        } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
       }
+    }
 
     });
   </script>

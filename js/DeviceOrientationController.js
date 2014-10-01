@@ -142,7 +142,7 @@ var DeviceOrientationController = function ( object, domElement ) {
 
 	this.onDocumentTouchStart = function ( event ) {
 		event.preventDefault();
-		event.stopPropagation();
+		//event.stopPropagation();
 
 		switch ( event.touches.length ) {
 			case 1: // ROTATE
