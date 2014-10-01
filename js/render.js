@@ -14,7 +14,7 @@ function AudioScene(audioScene) {
   effect.separation = 0.2;
 
   renderer.setSize(WIDTH, HEIGHT);
-  renderer.setClearColorHex(0x000000, 1);
+  renderer.setClearColor(0x000000, 1);
   effect.setSize(WIDTH, HEIGHT);
   //camera.position.set(0,-5);
   //camera.up = new THREE.Vector3(0,0,-1);
@@ -125,7 +125,7 @@ AudioScene.prototype.onClick = function() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('polymer-ready', function() {
   as = new AudioScene();
   as.addSource(1, 0, 0xff0000);
   as.addSource(0, 1, 0x00ff00);
