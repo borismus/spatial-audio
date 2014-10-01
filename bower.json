@@ -1,0 +1,14 @@
+{
+  "name": "jazz3d",
+  "version": "0.0.0",
+  "homepage": "https://github.com/borismus/jazz3d",
+  "authors": [
+    "Boris Smus <boris@smus.com>"
+  ],
+  "description": "Custom elements for positional audio.",
+  "license": "Apache2",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.4.1",
+    "threejs": "*"
+  }
+}

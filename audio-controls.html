@@ -1,0 +1,69 @@
+<polymer-element name="audio-controls" attributes="contextSelector"
+    on-keydown="{{keyHandler}}">
+  <template>
+    <style>
+      #controls {
+        position: absolute;
+        bottom: 0;
+      }
+    </style>
+    <div id="controls">
+      <button id="play" on-click={{play}}>Play</button>
+    </div>
+  </template>
+  <script>
+    var DELTA = 0.1;
+    var ANGLE_DELTA = 0.1;
+    Polymer({
+      ready: function() {
+        // Handle keyboard input.
+        this.tabIndex = 0;
+        this.focus();
+      },
+
+      play: function() {
+        var context3d = document.querySelector(this.contextSelector);
+        context3d.play();
+      },
+
+      keyHandler: function(event, detail, sender) {
+        var context3d = document.querySelector(this.contextSelector);
+        var observer = context3d.querySelector('audio-observer');
+        var handled = false;
+
+        // Keyboard based movement.
+        switch (event.keyCode) {
+          case 37: // Left
+            observer.position.x -= DELTA;
+            handled = true;
+            break;
+          case 38: // Up
+            observer.position.y += DELTA;
+            handled = true;
+            break;
+          case 39: // Right
+            observer.position.x += DELTA;
+            handled = true;
+            break;
+          case 40: // Down
+            observer.position.y -= DELTA;
+            handled = true;
+            break;
+          case 188: // Comma (,)
+            observer.turn(ANGLE_DELTA);
+            handled = true;
+            break;
+          case 190: // Period (.)
+            observer.turn(-ANGLE_DELTA);
+            handled = true;
+            break;
+        }
+        if (handled) {
+          event.preventDefault();
+        } else {
+          console.log('Ignoring key', event.keyCode);
+        }
+      },
+    });
+  </script>
+</polymer-element>

@@ -1,0 +1,62 @@
+<polymer-element name="audio-observer" attributes="context position orientation">
+  <template>
+    AudioObserver
+  </template>
+  <script>
+
+    Polymer({
+      context: null,
+      up: {x: 0, y: 0, z: 1},
+      observe: {
+        'position.x': 'positionChanged',
+        'position.y': 'positionChanged',
+        'orientation.x': 'orientationChanged',
+        'orientation.y': 'orientationChanged'
+      },
+
+      positionChanged: function() {
+        // If position is a string, parse it out and convert to object.
+        if (typeof(this.position) == typeof('')) {
+          console.log('Parsed position string');
+          this.position = AudioUtil.parseVector(this.position);
+        }
+        console.log('Position is now', this.position);
+        var listener = this.context.listener;
+        var p = this.position;
+        listener.setPosition(p.x, p.y, p.z);
+      },
+
+      orientationChanged: function() {
+        // If orientation is a string, parse it out and convert to object.
+        if (typeof(this.orientation) == typeof('')) {
+          this.orientation = AudioUtil.parseVector(this.orientation);
+        }
+        var o = this.orientation;
+        var up = this.up;
+        var listener = this.context.listener;
+        listener.setOrientation(o.x, o.y, o.z, up.x, up.y, up.z);
+      },
+
+      turn: function(angleDelta) {
+        var o = this.orientation;
+        // Go from current orientation to angle (in xy-plane).
+        var angle = Math.atan2(o.y, o.x);
+        // Transform the angle by the specified delta.
+        var newAngle = angle + angleDelta;
+        // Convert back to orientation vector.
+        var x = Math.cos(newAngle);
+        var y = Math.sin(newAngle);
+        this.orientation.x = x;
+        this.orientation.y = y;
+        console.log(newAngle, o.x, o.y);
+      },
+
+      getAngle: function() {
+        var o = this.orientation;
+        // Go from current orientation to angle (in xy-plane).
+        return Math.atan2(o.y, o.x);
+      }
+    });
+
+  </script>
+</polymer-element>

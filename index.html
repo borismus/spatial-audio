@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <link rel="import" href="bower_components/polymer/polymer.html">
+  <link rel="import" href="audio-context.html">
+  <link rel="import" href="audio-observer.html">
+  <link rel="import" href="audio-panner.html">
+  <link rel="import" href="audio-controls.html">
+
+  <script src="bower_components/threejs/build/three.js"></script>
+  <script src="js/DeviceOrientationControls.js"></script>
+  <script src="js/OrbitControls.js"></script>
+  <script src="js/StereoEffect.js"></script>
+  <script src="js/render.js"></script>
+
+  <script src="js/audio-util.js"></script>
+
+  <style>
+    #container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body unresolved>
+  <div id="container"></div>
+
+  <audio-context>
+    <audio-observer
+        position="0,0"
+        orientation="0,1"></audio-observer>
+    <audio-panner src="sounds/06_Piano.wav"
+        gain="0.3"
+        position="-1,0"
+        orientation="1,0"></audio-panner>
+    <audio-panner src="sounds/05_Bass.wav"
+        gain="1.2"
+        position="0,1"
+        orientation="0,-1"></audio-panner>
+    <audio-panner src="sounds/03_Snare.wav"
+        position="1,0"
+        orientation="-1,0"></audio-panner>
+  </audio-context>
+
+  <audio-controls contextSelector="audio-context"></audio-controls>
+</body>

@@ -1,0 +1,66 @@
+<polymer-element name="audio-panner" attributes="context src gain position orientation">
+  <template>
+  <div>AudioPanner <template if="{{loaded}}">✓</template></div>
+  </template>
+  <script>
+    Polymer({
+      context: null,
+      loaded: false,
+      ready: function() {
+        console.log('AudioPanner ready ' + this.src);
+
+        // Create the gain node.
+        var gain = this.context.createGain();
+        gain.gain.value = this.gain || 1;
+
+        // Load the sound.
+        AudioUtil.load(this.context, this.src, function(buffer) {
+          this.loaded = true;
+          this.buffer = buffer;
+        }.bind(this));
+
+        var panner = this.context.createPanner();
+        // Use a point sound for now.
+        panner.coneInnerAngle = 360;
+        panner.coneOuterAngle = 360;
+
+        panner.distanceModel = 'exponential';
+        panner.rolloffFactor = 4;
+
+        // Save the nodes for later.
+        this.gain = gain;
+        this.panner = panner;
+
+        // Connect the audio graph.
+        gain.connect(this.panner);
+        panner.connect(this.context.destination);
+      },
+
+      positionChanged: function() {
+        if (typeof(this.position) == typeof('')) {
+          this.position = AudioUtil.parseVector(this.position);
+        }
+        var p = this.position;
+        this.panner.setPosition(p.x, p.y, p.z);
+      },
+
+      orientationChanged: function() {
+        if (typeof(this.orientation) == typeof('')) {
+          this.orientation = AudioUtil.parseVector(this.orientation);
+        }
+        var o = this.orientation;
+        this.panner.setOrientation(o.x, o.y, o.z);
+      },
+
+      play: function() {
+        // Create a new source here.
+        var source = this.context.createBufferSource();
+        source.loop = true;
+        source.buffer = this.buffer;
+        source.connect(this.gain);
+        source.start(0);
+      },
+
+    });
+  </script>
+</polymer-element>

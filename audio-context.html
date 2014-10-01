@@ -1,0 +1,28 @@
+<polymer-element name="audio-context" attributes="context">
+  <template>
+    <div>AudioContext</div>
+    <div style="border: 1px dotted black">
+      <content></content>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      context: new webkitAudioContext(),
+
+      ready: function() {
+        // Set the audio context on all of the child nodes of this element.
+        for (var i = 0; i < this.childNodes.length; i++) {
+          var child = this.childNodes[i];
+          child.context = this.context;
+        }
+      },
+
+      play: function() {
+        var panners = document.querySelectorAll('audio-panner');
+        for (var i = 0; i < panners.length; i++) {
+          panners[i].play();
+        }
+      }
+    });
+  </script>
+</polymer-element>
