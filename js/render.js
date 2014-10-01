@@ -14,6 +14,7 @@ function AudioScene(audioScene) {
   effect.separation = 0.2;
 
   renderer.setSize(WIDTH, HEIGHT);
+  renderer.setClearColorHex(0x000000, 1);
   effect.setSize(WIDTH, HEIGHT);
   //camera.position.set(0,-5);
   //camera.up = new THREE.Vector3(0,0,-1);
