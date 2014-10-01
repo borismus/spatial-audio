@@ -71,8 +71,12 @@ AudioScene.prototype.turnObserver = function(angle) {
 AudioScene.prototype.render = function() {
   // Update the observer object position based on the audio DOM.
   var observer = document.querySelector('audio-observer');
+  if (observer.position) {
   this.moveObserver(observer.position.x, observer.position.y);
   this.turnObserver(observer.getAngle());
+  } else {
+    console.log('Observer position not set yet.');
+  }
   this.effect.render(this.scene, this.camera);
   //this.renderer.render(this.scene, this.camera);
   requestAnimationFrame(this.render.bind(this));
