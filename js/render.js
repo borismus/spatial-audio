@@ -3,19 +3,13 @@
 
 function AudioScene(audioScene) {
   // Set the scene size.
-  var container = document.querySelector('#container');
-  var WIDTH = container.offsetWidth;
-  var HEIGHT = container.offsetHeight;
-
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(75, WIDTH/HEIGHT, 0.1, 1000);
+  var camera = new THREE.PerspectiveCamera(75, 1, 0.001, 700);
   var renderer = new THREE.WebGLRenderer();
   var effect = new THREE.StereoEffect(renderer);
   effect.separation = 0.2;
 
-  renderer.setSize(WIDTH, HEIGHT);
   renderer.setClearColor(0x000000, 1);
-  effect.setSize(WIDTH, HEIGHT);
   //camera.position.set(0,-5);
   //camera.up = new THREE.Vector3(0,0,-1);
   //camera.lookAt(new THREE.Vector3(0,0,0));
@@ -36,6 +30,9 @@ function AudioScene(audioScene) {
   window.addEventListener('deviceorientation', this.deviceOrientationListener, true);
 
   container.appendChild(renderer.domElement);
+
+  window.addEventListener('resize', this.onResize.bind(this), false);
+  setTimeout(this.onResize.bind(this), 1);
 }
 
 AudioScene.prototype.addSource = function(x, y, opt_color) {
@@ -123,7 +120,19 @@ AudioScene.prototype.onClick = function() {
   } else if (container.webkitRequestFullscreen) {
     container.webkitRequestFullscreen();
   }
-}
+};
+
+AudioScene.prototype.onResize = function() {
+  var container = document.querySelector('#container');
+  var width = container.offsetWidth;
+  var height = container.offsetHeight;
+
+  this.camera.aspect = width / height;
+  this.camera.updateProjectionMatrix();
+
+  this.renderer.setSize(width, height);
+  this.effect.setSize(width, height);
+};
 
 window.addEventListener('polymer-ready', function() {
   as = new AudioScene();
