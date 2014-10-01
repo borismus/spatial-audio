@@ -32,8 +32,8 @@ function AudioScene(audioScene) {
   this.observerObject = this.addObserver();
   this.controls = this.createOrbitControls();
 
-  window.addEventListener('deviceorientation',
-      this.setOrientationControls.bind(this), true);
+  this.deviceOrientationListener = this.setOrientationControls.bind(this);
+  window.addEventListener('deviceorientation', this.deviceOrientationListener, true);
 
   container.appendChild(renderer.domElement);
 }
@@ -109,7 +109,7 @@ AudioScene.prototype.setOrientationControls = function(e) {
 
   this.renderer.domElement.addEventListener('click', this.onClick, false);
 
-  window.removeEventListener('deviceorientation', this.setOrientationControls.bind(this));
+  window.removeEventListener('deviceorientation', this.deviceOrientationListener);
 };
 
 AudioScene.prototype.onClick = function() {
