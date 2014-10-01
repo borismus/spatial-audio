@@ -1,4 +1,4 @@
-<polymer-element name="audio-controls" attributes="contextSelector"
+<polymer-element name="audio-controls" attributes="contextSelector autoplay"
     on-keydown="{{keyHandler}}">
   <template>
     <style>
@@ -6,19 +6,41 @@
         position: absolute;
         bottom: 0;
       }
+      #render {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
     </style>
+    <div id="render"></div>
     <div id="controls">
+      <template if="{{!autoplay}}">
       <button id="play" on-click={{play}}>Play</button>
+      </template>
     </div>
   </template>
   <script>
     var DELTA = 0.1;
     var ANGLE_DELTA = 0.1;
+
     Polymer({
-      ready: function() {
+      autoplay: true,
+
+      domReady: function() {
         // Handle keyboard input.
         this.tabIndex = 0;
         this.focus();
+        window.addEventListener('resize', this.onResize.bind(this));
+
+        this.audioScene = new AudioScene(this.contextSelector);
+        this.$.render.appendChild(this.audioScene.renderer.domElement);
+        this.audioScene.render();
+
+        if (this.autoplay) {
+          this.autoplayTimer = setInterval(this.tryAutoplay.bind(this), 500);
+        }
       },
 
       play: function() {
@@ -64,6 +86,20 @@
           console.log('Ignoring key', event.keyCode);
         }
       },
+
+      onResize: function() {
+        this.audioScene.onResize();
+      },
+
+      tryAutoplay: function() {
+        var context3d = document.querySelector(this.contextSelector);
+        var result = context3d.play();
+        if (result) {
+          clearInterval(this.autoplayTimer);
+        } else {
+          console.log('failed to autoplay');
+        }
+      }
     });
   </script>
 </polymer-element>

@@ -1,7 +1,9 @@
 // Renders the audio scene into something to render.
 
+var COLORS = [0xff0000, 0x00ff00, 0x0000ff];
 
-function AudioScene(audioScene) {
+function AudioScene(contextSelector) {
+  this.contextNode = document.querySelector('audio-context');
   var container = document.querySelector('#container');
   this.isCardboard = this.isMobile();
 
@@ -32,19 +34,25 @@ function AudioScene(audioScene) {
   this.observerObject = observer;
   this.dummy = this.createObserver();
 
+  var panners = this.contextNode.querySelectorAll('audio-panner');
+  for (var i = 0; i < panners.length; i++) {
+    var panner = panners[i];
+    this.addSource(panner.position.x, panner.position.y, COLORS[i % COLORS.length]);
+  }
+
   if (this.isCardboard) {
     var controls = new DeviceOrientationController(this.dummy, renderer.domElement);
     controls.connect();
     this.controls = controls;
-
-    container.addEventListener('click', this.goFullscreen.bind(this));
   }
 
+  //container.addEventListener('click', this.goFullscreen.bind(this));
+
   // Handle resizing.
-  window.addEventListener('resize', this.onResize.bind(this), false);
+  //window.addEventListener('resize', this.onResize.bind(this), false);
   this.onResize();
 
-  container.appendChild(renderer.domElement);
+  //container.appendChild(renderer.domElement);
 }
 
 AudioScene.prototype.addSource = function(x, y, opt_color) {
@@ -86,14 +94,14 @@ AudioScene.prototype.render = function() {
     this.effect.render(this.scene, this.camera);
     this.controls.update();
     // Get the camera position and apply it to the observer.
-    observer.setOrientationFromQuaternion(this.dummy.quaternion);
+    observer.setGeometryFromQuaternion(this.dummy.quaternion);
   } else {
     this.renderer.render(this.scene, this.camera);
   }
   requestAnimationFrame(this.render.bind(this));
 }
 
-AudioScene.prototype.goFullscreen= function() {
+AudioScene.prototype.goFullscreen = function() {
   var container = document.querySelector('#container');
   if (container.requestFullscreen) {
     container.requestFullscreen();
@@ -121,14 +129,3 @@ AudioScene.prototype.onResize = function() {
 AudioScene.prototype.isMobile = function() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 };
-
-var COLORS = [0xff0000, 0x00ff00, 0x0000ff];
-window.addEventListener('polymer-ready', function() {
-  as = new AudioScene();
-  var panners = document.querySelectorAll('audio-panner');
-  for (var i = 0; i < panners.length; i++) {
-    var panner = panners[i];
-    as.addSource(panner.position.x, panner.position.y, COLORS[i % COLORS.length]);
-  }
-  as.render();
-});

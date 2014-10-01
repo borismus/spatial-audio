@@ -57,12 +57,17 @@
         return Math.atan2(o.y, o.x);
       },
 
-      setOrientationFromQuaternion: function(quaternion) {
+      setGeometryFromQuaternion: function(quaternion) {
         // Quaternion is specified from the device motion API.
         var vector = new THREE.Vector3(0, 0, -1);
         vector.applyQuaternion(quaternion);
+        // Update the orientation.
         this.orientation.x = vector.z;
         this.orientation.y = vector.x;
+
+        // Update the position.
+        this.position.x = vector.z/2;
+        this.position.y = vector.x/2;
       },
     });
 

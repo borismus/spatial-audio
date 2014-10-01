@@ -19,9 +19,20 @@
 
       play: function() {
         var panners = document.querySelectorAll('audio-panner');
+        var ready = true;
+        // First check if all panners are loaded.
         for (var i = 0; i < panners.length; i++) {
-          panners[i].play();
+          if (!panners[i].loaded) {
+            ready = false;
+            break;
+          }
         }
+        if (ready) {
+          for (var i = 0; i < panners.length; i++) {
+            panners[i].play();
+          }
+        }
+        return ready;
       }
     });
   </script>
