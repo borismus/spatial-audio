@@ -55,7 +55,15 @@
         var o = this.orientation;
         // Go from current orientation to angle (in xy-plane).
         return Math.atan2(o.y, o.x);
-      }
+      },
+
+      setOrientationFromQuaternion: function(quaternion) {
+        // Quaternion is specified from the device motion API.
+        var vector = new THREE.Vector3(0, 0, -1);
+        vector.applyQuaternion(quaternion);
+        this.orientation.x = vector.z;
+        this.orientation.y = vector.x;
+      },
     });
 
   </script>

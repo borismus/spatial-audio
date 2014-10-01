@@ -55,6 +55,7 @@
         // Create a new source here.
         var source = this.context.createBufferSource();
         source.buffer = this.buffer;
+        source.loop = true;
         source.connect(this.gain);
         source.start(0);
       },

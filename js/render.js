@@ -2,6 +2,7 @@
 
 
 function AudioScene(audioScene) {
+  var container = document.querySelector('#container');
   this.isCardboard = this.isMobile();
 
   // Set the scene size.
@@ -29,18 +30,20 @@ function AudioScene(audioScene) {
   this.camera = camera;
   this.effect = effect;
   this.observerObject = observer;
+  this.dummy = this.createObserver();
 
   if (this.isCardboard) {
-    var controls = new DeviceOrientationController(camera, renderer.domElement);
+    var controls = new DeviceOrientationController(this.dummy, renderer.domElement);
     controls.connect();
     this.controls = controls;
+
+    container.addEventListener('click', this.goFullscreen.bind(this));
   }
 
   // Handle resizing.
   window.addEventListener('resize', this.onResize.bind(this), false);
   this.onResize();
 
-  var container = document.querySelector('#container');
   container.appendChild(renderer.domElement);
 }
 
@@ -82,13 +85,15 @@ AudioScene.prototype.render = function() {
   if (this.isCardboard) {
     this.effect.render(this.scene, this.camera);
     this.controls.update();
+    // Get the camera position and apply it to the observer.
+    observer.setOrientationFromQuaternion(this.dummy.quaternion);
   } else {
     this.renderer.render(this.scene, this.camera);
   }
   requestAnimationFrame(this.render.bind(this));
 }
 
-AudioScene.prototype.onClick = function() {
+AudioScene.prototype.goFullscreen= function() {
   var container = document.querySelector('#container');
   if (container.requestFullscreen) {
     container.requestFullscreen();
