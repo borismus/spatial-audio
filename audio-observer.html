@@ -23,7 +23,7 @@
         var listener = this.context.listener;
         var p = this.position;
         listener.setPosition(p.x, p.y, p.z);
-        console.log('Position is now', this.position);
+        //console.log('Position is now', this.position);
       },
 
       orientationChanged: function() {
@@ -35,7 +35,7 @@
         var up = this.up;
         var listener = this.context.listener;
         listener.setOrientation(o.x, o.y, o.z, up.x, up.y, up.z);
-        console.log('Orientation is now', this.orientation);
+        //console.log('Orientation is now', this.orientation);
       },
 
       turn: function(angleDelta) {
@@ -61,13 +61,15 @@
         // Quaternion is specified from the device motion API.
         var vector = new THREE.Vector3(0, 0, -1);
         vector.applyQuaternion(quaternion);
+        var o = new THREE.Vector3(vector.z, vector.x, vector.y);
         // Update the orientation.
-        this.orientation.x = vector.z;
-        this.orientation.y = vector.x;
+        this.orientation.x = o.x;
+        this.orientation.y = o.y;
+        this.orientation.z = o.z;
 
         // Update the position.
-        this.position.x = vector.z/6;
-        this.position.y = vector.x/6;
+        this.position.x = o.x/6;
+        this.position.y = o.y/6;
       },
     });
 

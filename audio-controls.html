@@ -1,5 +1,5 @@
 <polymer-element name="audio-controls" attributes="contextSelector autoplay"
-on-keydown="{{keyHandler}}" on-click="{{goFullscreen}}" on-tap="{{goFullscreen}}">
+on-keydown="{{keyHandler}}">
   <template>
     <style>
       #controls {
@@ -41,6 +41,8 @@ on-keydown="{{keyHandler}}" on-click="{{goFullscreen}}" on-tap="{{goFullscreen}}
         if (this.autoplay) {
           this.autoplayTimer = setInterval(this.tryAutoplay.bind(this), 500);
         }
+
+        this.$.render.addEventListener('touchstart', this.goFullscreen.bind(this));
       },
 
       play: function() {
