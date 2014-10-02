@@ -1,4 +1,4 @@
-<polymer-element name="audio-context" attributes="context">
+<polymer-element name="audio-context" attributes="context isPlaying">
   <template>
     <div>AudioContext</div>
     <div style="border: 1px dotted black">
@@ -8,6 +8,7 @@
   <script>
     Polymer({
       context: new webkitAudioContext(),
+      isPlaying: false,
 
       ready: function() {
         // Set the audio context on all of the child nodes of this element.
