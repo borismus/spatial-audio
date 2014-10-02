@@ -98,8 +98,9 @@ on-keydown="{{keyHandler}}">
         var result = context3d.play();
         if (result) {
           clearInterval(this.autoplayTimer);
+          console.log('Playing all sounds.');
         } else {
-          console.log('failed to autoplay');
+          console.log('Failed to autoplay');
         }
       },
 
